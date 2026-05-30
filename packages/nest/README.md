@@ -66,7 +66,5 @@ export class AppController {
 `@TraceId()` returns the active W3C trace ID when a valid `traceparent` is
 present.
 
-Migration from cls-rtracer and architecture diagrams: see the root
-[README](https://github.com/Manavpreeet/tracekit-js#tracekit-vs-cls-rtracer).
 
 Repository: [Manavpreeet/tracekit-js](https://github.com/Manavpreeet/tracekit-js)
