@@ -88,19 +88,19 @@ delivers work, and a worker logs with the same IDs.
 
 ```mermaid
 flowchart LR
-  Client[Client / Browser]
-  API[API Service\n@tracekit/nest]
-  SNS[Amazon SNS\n@tracekit/sns]
-  SQS[Amazon SQS\n@tracekit/sqs]
-  Worker[Worker\n@tracekit/bullmq]
-  Logs[(Logs\n@tracekit/pino)]
+  client["Client / Browser"]
+  api["API Service<br/>@tracekit/nest"]
+  sns["Amazon SNS<br/>@tracekit/sns"]
+  sqsNode["Amazon SQS<br/>@tracekit/sqs"]
+  worker["Worker<br/>@tracekit/bullmq"]
+  logs[("Logs<br/>@tracekit/pino")]
 
-  Client -->|"HTTP + x-request-id"| API
-  API -->|"Publish + __tracekit attr"| SNS
-  SNS --> SQS
-  SQS -->|"processSqsMessageWithTrace"| Worker
-  API --> Logs
-  Worker --> Logs
+  client -->|"HTTP + x-request-id"| api
+  api -->|"Publish + __tracekit attr"| sns
+  sns --> sqsNode
+  sqsNode -->|"processSqsMessageWithTrace"| worker
+  api --> logs
+  worker --> logs
 ```
 
 ### In-process architecture
@@ -177,18 +177,18 @@ Jobs and messages store a minimal JSON carrier under **`__tracekit`**.
 
 ```mermaid
 flowchart LR
-  Producer[Producer\nactive ALS context]
-  Carrier["TraceCarrier\nrequestId, correlationId,\noptional traceId"]
-  Transport["Bull job data\nor SQS/SNS MessageAttributes"]
-  Consumer[Consumer handler]
-  Restore["restoreTraceContext()"]
-  ALS2[Worker ALS]
+  producer["Producer<br/>active ALS context"]
+  carrier["TraceCarrier<br/>requestId, correlationId<br/>optional traceId"]
+  transport["Bull job data<br/>or SQS/SNS MessageAttributes"]
+  consumer["Consumer handler"]
+  restore["restoreTraceContext()"]
+  als2["Worker ALS"]
 
-  Producer --> Carrier
-  Carrier --> Transport
-  Transport --> Consumer
-  Consumer --> Restore
-  Restore --> ALS2
+  producer --> carrier
+  carrier --> transport
+  transport --> consumer
+  consumer --> restore
+  restore --> als2
 ```
 
 ### Feature map (all packages)
@@ -203,31 +203,31 @@ flowchart TB
   end
 
   subgraph ingress [HTTP ingress adapters]
-    EXP["@tracekit/express\ntraceMiddleware"]
-    NEST["@tracekit/nest\nTraceKitInterceptor"]
-    FAST["@tracekit/fastify\ntracePlugin"]
+    EXP["@tracekit/express<br/>traceMiddleware"]
+    NEST["@tracekit/nest<br/>TraceKitInterceptor"]
+    FAST["@tracekit/fastify<br/>tracePlugin"]
   end
 
-  CORE["@tracekit/core\ncreateTraceContext · ALS · carriers"]
+  CORE["@tracekit/core<br/>createTraceContext · ALS · carriers"]
 
   subgraph consume [Read context in-process]
-    GET["getRequestId()\ngetCorrelationId()"]
+    GET["getRequestId()<br/>getCorrelationId()"]
   end
 
   subgraph logs [Log enrichment]
-    PINO["@tracekit/pino\nmixin"]
-    WIN["@tracekit/winston\nformat"]
+    PINO["@tracekit/pino<br/>mixin"]
+    WIN["@tracekit/winston<br/>format"]
   end
 
   subgraph httpOut [Outbound HTTP]
-    AXIOS["@tracekit/axios\ninterceptor"]
-    FETCH["@tracekit/fetch\ntraceFetch"]
+    AXIOS["@tracekit/axios<br/>interceptor"]
+    FETCH["@tracekit/fetch<br/>traceFetch"]
   end
 
   subgraph async [Async propagation]
-    BULL["@tracekit/bullmq\naddJobWithTrace"]
-    SQS["@tracekit/sqs\nenrichSendMessageParams"]
-    SNS["@tracekit/sns\nenrichSnsPublishInput"]
+    BULL["@tracekit/bullmq<br/>addJobWithTrace"]
+    SQS_PKG["@tracekit/sqs<br/>enrichSendMessageParams"]
+    SNS_PKG["@tracekit/sns<br/>enrichSnsPublishInput"]
   end
 
   Browser --> EXP
@@ -243,13 +243,13 @@ flowchart TB
   CORE --> AXIOS
   CORE --> FETCH
   CORE --> BULL
-  CORE --> SQS
-  CORE --> SNS
+  CORE --> SQS_PKG
+  CORE --> SNS_PKG
   AXIOS --> Service
   FETCH --> Service
   BULL --> CORE
-  SQS --> CORE
-  SNS --> SQS
+  SQS_PKG --> CORE
+  SNS_PKG --> SQS_PKG
 ```
 
 ### Trace context model
@@ -344,9 +344,9 @@ sequenceDiagram
 
 ```mermaid
 flowchart LR
-  APP[Your handler\nALS active] --> INT[request interceptor]
-  INT --> INJ[injectTraceHeaders]
-  INJ --> OUT[Downstream service\nreceives x-request-id\nand x-correlation-id]
+  app["Your handler<br/>ALS active"] --> intc["request interceptor"]
+  intc --> inj["injectTraceHeaders"]
+  inj --> out["Downstream service<br/>receives x-request-id<br/>and x-correlation-id"]
 ```
 
 #### `@tracekit/fetch` — outbound fetch
@@ -367,7 +367,7 @@ flowchart TB
   MIX -->|Winston| WF[traceKitWinstonFormat]
   PM --> ALS[(ALS)]
   WF --> ALS
-  ALS --> OUT["JSON log line +\nrequestId +\ncorrelationId"]
+  ALS --> OUT["JSON log line +<br/>requestId +<br/>correlationId"]
 ```
 
 #### `@tracekit/bullmq` — Redis queues
@@ -554,7 +554,7 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-  GW[Gateway / Auth\nnest + pino] --> PLAT[Platform API\nnest + axios]
+  GW["Gateway / Auth<br/>nest + pino"] --> PLAT["Platform API<br/>nest + axios"]
   PLAT --> SNSP[sns publish]
   SNSP --> SQSC[sqs consumer]
   PLAT --> BULLQ[bullmq enqueue]
