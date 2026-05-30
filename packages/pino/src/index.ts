@@ -1,0 +1,1 @@
+export { traceKitPinoMixin } from "./mixin";

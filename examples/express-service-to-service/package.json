@@ -1,0 +1,19 @@
+{
+  "name": "@tracekit-example/express-service-to-service",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "service:a": "tsx src/service-a.ts",
+    "service:b": "tsx src/service-b.ts"
+  },
+  "dependencies": {
+    "@tracekit/axios": "workspace:*",
+    "@tracekit/core": "workspace:*",
+    "@tracekit/express": "workspace:*",
+    "@tracekit/pino": "workspace:*",
+    "axios": "^1.16.1",
+    "express": "^5.2.1",
+    "pino": "^10.3.1"
+  }
+}

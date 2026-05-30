@@ -1,0 +1,71 @@
+{
+  "name": "tracekit-js",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Lightweight request correlation SDK for Node.js microservices.",
+  "author": "Manavpreet Singh <manavpreeetsingh@gmail.com>",
+  "license": "MIT",
+  "packageManager": "pnpm@10.10.0",
+  "homepage": "https://github.com/Manavpreeet/tracekit-js#readme",
+  "bugs": {
+    "url": "https://github.com/Manavpreeet/tracekit-js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Manavpreeet/tracekit-js.git"
+  },
+  "keywords": [
+    "tracekit",
+    "request-id",
+    "correlation-id",
+    "microservices",
+    "typescript",
+    "nodejs"
+  ],
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "scripts": {
+    "benchmark": "pnpm --filter @tracekit/core build && node ./scripts/benchmark-core.mjs",
+    "benchmark:compare": "pnpm --filter @tracekit/core build && node ./scripts/benchmark-vs-cls-rtracer.mjs",
+    "build": "pnpm -r --if-present build",
+    "clean": "pnpm -r --if-present clean",
+    "format": "prettier --write .",
+    "lint": "eslint .",
+    "pack:check": "node ./scripts/pack-packages.mjs",
+    "release:check": "pnpm lint && pnpm test && pnpm typecheck && pnpm pack:check",
+    "size-check": "pnpm build && node ./scripts/check-package-size.mjs",
+    "test": "pnpm -r --if-present build && pnpm -r --if-present test",
+    "typecheck": "pnpm -r --if-present build && pnpm -r --if-present typecheck"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@nestjs/common": "^11.1.24",
+    "@nestjs/core": "^11.1.24",
+    "@nestjs/platform-express": "^11.1.24",
+    "@nestjs/platform-fastify": "^11.1.24",
+    "@nestjs/testing": "^11.1.24",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.9.1",
+    "@types/supertest": "^7.2.0",
+    "axios": "^1.16.1",
+    "bullmq": "^5.77.3",
+    "cls-rtracer": "^2.6.3",
+    "eslint": "^10.4.0",
+    "express": "^5.2.1",
+    "fastify": "^5.8.5",
+    "fastify-plugin": "^5.1.0",
+    "globals": "^17.6.0",
+    "pino": "^10.3.1",
+    "prettier": "^3.8.3",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "supertest": "^7.2.2",
+    "tsup": "^8.5.1",
+    "tsx": "^4.22.3",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.60.0",
+    "vitest": "^4.1.7",
+    "winston": "^3.19.0"
+  }
+}

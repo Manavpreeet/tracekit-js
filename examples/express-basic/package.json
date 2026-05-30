@@ -1,0 +1,16 @@
+{
+  "name": "@tracekit-example/express-basic",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@tracekit/express": "workspace:*",
+    "@tracekit/pino": "workspace:*",
+    "@tracekit/core": "workspace:*",
+    "express": "^5.2.1",
+    "pino": "^10.3.1"
+  }
+}

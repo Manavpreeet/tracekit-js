@@ -1,0 +1,20 @@
+{
+  "name": "@tracekit-example/bullmq-worker",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "api": "tsx src/api.ts",
+    "worker": "tsx src/worker.ts"
+  },
+  "dependencies": {
+    "@tracekit/bullmq": "workspace:*",
+    "@tracekit/core": "workspace:*",
+    "@tracekit/express": "workspace:*",
+    "@tracekit/pino": "workspace:*",
+    "bullmq": "^5.77.3",
+    "express": "^5.2.1",
+    "ioredis": "^5.8.2",
+    "pino": "^10.3.1"
+  }
+}
